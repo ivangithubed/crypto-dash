@@ -10,7 +10,7 @@ import Header from "./components/Header";
 import NotFoundPage from "./pages/not-found";
 import CoinDetailsPage from "./pages/coin-details";
 
-const API_URL = import.meta.env.VITE_COINS_API_URL;
+// const API_URL = import.meta.env.VITE_COINS_API_URL;
 
 const App = () => {
   const [coins, setCoins] = useState([]);
@@ -21,19 +21,15 @@ const App = () => {
   const [sortBy, setSortBy] = useState("market_cap_desc");
 
   useEffect(() => {
-
-
     const fetchCoins = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`
-        );
+        // Тепер звертаємось до локального проксі-ендпоінту
+        const response = await fetch(`/api/coindata?limit=${limit}`);
         if (!response.ok) {
           throw new Error("Не вдалось отримати дані");
         }
         const data = await response.json();
         setCoins(data);
-        // console.log(data);
       } catch (error) {
         setError(error.message);
       } finally {
